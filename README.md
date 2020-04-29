@@ -1,4 +1,4 @@
-= The DisMax & eDismax Query Parser
+# The DisMax & eDismax Query Parser
 
 The DisMax & eDisMax(Extended DisMax) query parser is an improved version of the <<the-dismax-query-parser.adoc#the-dismax-query-parser,DisMax query parser>>.
 
