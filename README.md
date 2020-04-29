@@ -1,0 +1,1 @@
+# edismax-solr-spring
