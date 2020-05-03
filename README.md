@@ -25,10 +25,10 @@ As Dismax had a lot of limitations, EDismax query parser was added, So Extended 
 
 ## Extended DisMax Parameters
 
-In addition to all the <<the-dismax-query-parser.adoc#dismax-query-parser-parameters,DisMax parameters>>, Extended DisMax includes these query parameters:
+In addition to all the the-dismax-query-parser, Extended DisMax includes these query parameters:
 
 `mm`::
- Minimum should match.  See the <<the-dismax-query-parser.adoc#mm-minimum-should-match-parameter,DisMax mm parameter>> for a description of `mm`. The default eDisMax `mm` value differs from that of DisMax:
+ Minimum should match.  See the the-dismax-query-parser for a description of `mm`. The default eDisMax `mm` value differs from that of DisMax:
 +
 * The default `mm` value is 0%:
 ** if the query contains an explicit operator other than "AND" ("-", "+", "OR", "NOT"); or
@@ -36,4 +36,4 @@ In addition to all the <<the-dismax-query-parser.adoc#dismax-query-parser-parame
 * The default `mm` value is 100% if `q.op` is "AND" and the query does not contain any explicit operators other than "AND".
 
 `boost`::
-A multivalued list of strings parsed as <<function-queries.adoc#available-functions,functions>> whose results will be multiplied into the score from the main query for all matching documents. This parameter is shorthand for wrapping the query produced by eDisMax 
+A multivalued list of strings parsed as function-queries whose results will be multiplied into the score from the main query for all matching documents. This parameter is shorthand for wrapping the query produced by eDisMax 
