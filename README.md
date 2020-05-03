@@ -1,12 +1,21 @@
 
 ## Prerequisites
 
-* install solr
-* create new core with name content 
-`bin/solr create -c content`
-* have a knowledge about solr basics
+* Install Apache Solr `http://lucene.apache.org/solr/downloads.html`
+* create new core with name content `bin/solr create -c content`
+* have a basic knowledge about Apache Solr 
 
-# The eDismax Query Parser Overview
+## Dismax Query parser
+A Dismax query is nothing but a union of documents produced by the sub-queries and scores each document produced by the sub-query. In general, the DisMax query parser’s interface is more like that of Google than the interface of the standard Solr request handler. This similarity makes DisMax the appropriate query parser for many consumer applications.
+
+#### The commonly used query parameters are:
+
+* q – Defines the raw input strings for the query.
+* qf – Query Fields: specifies the fields in the index on which to perform the query. If absent, defaults to df.
+* bq – Boost Query: specifies a factor by which a term or phrase should be “boosted” in importance when
+considering a match.
+
+## The eDismax Query Parser
 
 The eDisMax(Extended DisMax) query parser is an improved version of the `the-dismax-query-parser`
 
@@ -23,7 +32,7 @@ As Dismax had a lot of limitations, EDismax query parser was added, So Extended 
 * supports pure negative nested queries: queries such as `+foo (-foo)` will match all documents.
 * lets you specify which fields the end user is allowed to query, and to disallow direct fielded searches.
 
-## Extended DisMax Parameters
+#### The commonly used query parameters are:
 
 In addition to all the the-dismax-query-parser, Extended DisMax includes these query parameters:
 
