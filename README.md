@@ -1,14 +1,11 @@
 
-== Prerequisites
-
-All of the sample URLs in this section assume you are running Solr's "```content```" example:
+## Prerequisites
 
 * install solr
-* create new core with name `content`
-----
-bin/solr create -c content
-----
-*
+* create new core with name content 
+`bin/solr create -c content`
+* have a knowledge about solr basics
+
 # The eDismax Query Parser Overview
 
 The eDisMax(Extended DisMax) query parser is an improved version of the `the-dismax-query-parser`
