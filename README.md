@@ -1,10 +1,21 @@
-# The DisMax & eDismax Query Parser
 
-The DisMax & eDisMax(Extended DisMax) query parser is an improved version of the <<the-dismax-query-parser.adoc#the-dismax-query-parser,DisMax query parser>>.
+== Prerequisites
 
-In addition to supporting all the DisMax query parser parameters, Extended Dismax:
+All of the sample URLs in this section assume you are running Solr's "```content```" example:
 
-* supports <<the-standard-query-parser.adoc#the-standard-query-parser,Solr's standard query parser>> syntax such as (non-exhaustive list):
+* install solr
+* create new core with name `content`
+----
+bin/solr create -c content
+----
+*
+# The eDismax Query Parser Overview
+
+The eDisMax(Extended DisMax) query parser is an improved version of the `the-dismax-query-parser`
+
+As Dismax had a lot of limitations, EDismax query parser was added, So Extended Dismax:
+
+* supports the-standard-query-parser syntax such as (non-exhaustive list):
 ** boolean operators such as AND (+, &&), OR (||), NOT (-).
 ** optionally treats lowercase "and" and "or" as "AND" and "OR" in Lucene syntax mode
 ** optionally allows embedded queries using other query parsers or functions
@@ -15,7 +26,7 @@ In addition to supporting all the DisMax query parser parameters, Extended Disma
 * supports pure negative nested queries: queries such as `+foo (-foo)` will match all documents.
 * lets you specify which fields the end user is allowed to query, and to disallow direct fielded searches.
 
-== Extended DisMax Parameters
+## Extended DisMax Parameters
 
 In addition to all the <<the-dismax-query-parser.adoc#dismax-query-parser-parameters,DisMax parameters>>, Extended DisMax includes these query parameters:
 
