@@ -1,4 +1,4 @@
-package net.kmsys.springsolredismax;
+package kmsys.teck.solr.edismax;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.springframework.data.mapping.context.MappingContext;
