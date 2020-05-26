@@ -58,3 +58,187 @@ so the `mm` works only on optional terms, let's have examples to understand:
 So it should set a default value for the 'mm' parameter in solrconfig.xml file.
 
 * `boost`: Boost Query: specifies a factor by which a term or phrase should be "boosted" in importance when considering a match.
+
+## Code Explanation
+
+### `EdismaxTest` class
+
+* let's clear(delete) data from solr core before run ourt test method: 
+`  
+    @Before
+    public void clearSolrData() {
+        solrTemplate.delete(solrCoreName, new SimpleQuery("*:*"));
+    }
+`
+
+* use edismax to search by query with `MinumMatch` and `Boost` parameters by creating new method with name  `findWithCustomEdismaxCriteria`:
+
+`
+    private Page<Product> findWithCustomEdismaxCriteria(String searchText,
+                                                        String fieldName,
+                                                        int minimumMatchPercent,
+                                                        int boost,
+                                                        Pageable pageable) {
+
+        //create instance of edismaxQuery
+        EdismaxQuery edismaxQuery = new SimpleEdismaxQuery();
+        //add criteria
+        if (searchText != null)
+            edismaxQuery.addCriteria(new SimpleStringCriteria(searchText));
+        //set pageable
+        if (pageable != null)
+            edismaxQuery.setPageRequest(pageable);
+        //set minimum match percent(not applied if criteria contains boolean operator(AND, OR, NOT) )
+        edismaxQuery.setMinimumMatchPercent(minimumMatchPercent);
+        //add filter query
+        //add query filed with boost
+        if (fieldName != null)
+            edismaxQuery.addQueryField(fieldName, boost);
+
+        //get result from Solr Core
+        Page<Product> solrDocuments = solrTemplate.query(solrCoreName, edismaxQuery, Product.class);
+        return solrDocuments;
+    }
+`
+
+* test(call) `findWithCustomEdismaxCriteria` method:
+`
+    @Test
+    public void whenSearchingProductsByNamedQueryAndMinumMatchAndBoost_thenAllMatchingProductsShouldAvialble() {
+        final Product phone = new Product();
+        phone.setId("P0001");
+        phone.setName("phone");
+        phone.setDescription("term1 term2 term3 term4");
+        save(phone);
+
+        final Product phoneCover = new Product();
+        phoneCover.setId("P0002");
+        phoneCover.setName("phone cover");
+        phoneCover.setDescription("term5 term6 term7 term8");
+        save(phoneCover);
+
+        final Product wirelessCharger = new Product();
+        wirelessCharger.setId("P0003");
+        wirelessCharger.setName("wireless charger");
+        wirelessCharger.setDescription("term9 term10 term11 term12");
+        save(wirelessCharger);
+
+        /********************************************************************************************/
+        /* get P0001 & P0003 but ignore P0002 by controlling minimumMatchPercent on searchText */
+        Page<Product> productPage = findWithCustomEdismaxCriteria("term1 term2 term6 term10 term11",
+                "description", 50, 2, PageRequest.of(0, 10));
+
+        //check size is (2)
+        assertEquals(2, productPage.getNumberOfElements());
+        //get first product then check it
+        Product firstProduct = productPage.getContent().get(0);
+        assertEquals(firstProduct.getId(), "P0001");
+        assertEquals(firstProduct.getDescription(), "term1 term2 term3 term4");
+        //get second product then check it
+        Product secondProduct = productPage.getContent().get(1);
+        assertEquals(secondProduct.getId(), "P0003");
+        assertEquals(secondProduct.getDescription(), "term9 term10 term11 term12");
+
+        /********************************************************************************************/
+        /* get P0002 & P0003 but ignore P0001 by controlling minimumMatchPercent on searchText */
+        productPage = findWithCustomEdismaxCriteria("term1 term5 term6 term10 term11",
+                "description", 50, 2, PageRequest.of(0, 10));
+
+        //get first product then check it
+        firstProduct = productPage.getContent().get(0);
+        assertEquals(firstProduct.getId(), "P0002");
+        assertEquals(firstProduct.getDescription(), "term5 term6 term7 term8");
+        //get second product then check it
+        secondProduct = productPage.getContent().get(1);
+        assertEquals(secondProduct.getId(), "P0003");
+        assertEquals(secondProduct.getDescription(), "term9 term10 term11 term12");
+
+        /********************************************************************************************/
+        /* make P0003 show first by using boost=2.5 on its terms */
+        productPage = findWithCustomEdismaxCriteria("term1 term2 term6 term10^2.5 term11",
+                "description", 50, 2, PageRequest.of(0, 10));
+
+        //get first product
+        firstProduct = productPage.getContent().get(0);
+        assertEquals(firstProduct.getId(), "P0003");
+        assertEquals(firstProduct.getDescription(), "term9 term10 term11 term12");
+        //get second product
+        secondProduct = productPage.getContent().get(1);
+        assertEquals(secondProduct.getId(), "P0001");
+        assertEquals(secondProduct.getDescription(), "term1 term2 term3 term4");
+
+        /********************************************************************************************/
+
+    }
+
+`
+
+* Another Implementation for `findWithCustomEdismaxCriteria` method: 
+
+`
+    private Page<Product> findWithCustomEdismaxCriteria(String searchText,
+                                                        String lang,
+                                                        String fieldName,
+                                                        Criteria criteria,
+                                                        Pageable pageable) {
+
+        //create instance of edismaxQuery
+        EdismaxQuery edismaxQuery = new SimpleEdismaxQuery();
+        //add criteria
+        if (searchText != null)
+            edismaxQuery.addCriteria(new SimpleStringCriteria(searchText));
+        //set pageable
+        if (pageable != null)
+            edismaxQuery.setPageRequest(pageable);
+        //set minimum match percent(not applied if criteria contains boolean operator(AND, OR, NOT) )
+        edismaxQuery.setMinimumMatchPercent(50);
+        //add filter query
+        if (criteria != null)
+            edismaxQuery.addFilterQuery(new SimpleFilterQuery(criteria));
+        //add query filed with boost
+        if (fieldName != null)
+            edismaxQuery.addQueryField(fieldName, 2.0);
+        //search at another field with language to apply language analyzer on it
+        if (lang != null && fieldName != null)
+            edismaxQuery.addQueryField(fieldName + "_" + lang, 2.0);
+
+        //get result from Solr Core
+        Page<Product> solrDocuments = solrTemplate.query(solrCoreName, edismaxQuery, Product.class);
+        return solrDocuments;
+    }
+`
+
+* Test(Call) the second Implementation for `findWithCustomEdismaxCriteria`:
+
+`
+    @Test
+    public void whenSearchingProductsByNamedQueryAndCriteria_thenAllMatchingProductsShouldAvialble() {
+        final Product phone = new Product();
+        phone.setId("P0001");
+        phone.setName("Smart Phone");
+        save(phone);
+
+        final Product phoneCover = new Product();
+        phoneCover.setId("P0002");
+        phoneCover.setName("Phone Cover");
+        save(phoneCover);
+
+        final Product wirelessCharger = new Product();
+        wirelessCharger.setId("P0003");
+        wirelessCharger.setName("Phone Charging Cable");
+        save(wirelessCharger);
+
+
+        Page<Product> productPage = findWithCustomEdismaxCriteria("Phone", null, "name",
+                new SimpleStringCriteria("id:" + wirelessCharger.getId()),
+                PageRequest.of(0, 10));
+
+        //check size is (1)
+        assertEquals(1, productPage.getNumberOfElements());
+        //get wirelessCharger product
+        Product wirelessChargerProduct = productPage.getContent().get(0);
+        assertEquals(wirelessChargerProduct.getId(), "P0003");
+        assertEquals(wirelessChargerProduct.getName(), "Phone Charging Cable");
+
+    }
+`
