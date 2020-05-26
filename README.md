@@ -65,16 +65,16 @@ So it should set a default value for the 'mm' parameter in solrconfig.xml file.
 
 * First thing we will Implement it: is method for clear(or delete) data from solr core before run our test method: 
 
-`  
+```  
     @Before
     public void clearSolrData() {
         solrTemplate.delete(solrCoreName, new SimpleQuery("*:*"));
     }
-`
+```
 
 * use edismax to search by query with `MinumMatch` and `Boost` parameters by creating new method with name  `findWithCustomEdismaxCriteria`:
 
-`
+```
 
     private Page<Product> findWithCustomEdismaxCriteria(String searchText,
                                                         String fieldName,
@@ -102,10 +102,11 @@ So it should set a default value for the 'mm' parameter in solrconfig.xml file.
         return solrDocuments;
     }
     
-`
+```
 
 * test(call) `findWithCustomEdismaxCriteria` method:
-`
+```
+
     @Test
     public void whenSearchingProductsByNamedQueryAndMinumMatchAndBoost_thenAllMatchingProductsShouldAvialble() {
         final Product phone = new Product();
@@ -174,11 +175,12 @@ So it should set a default value for the 'mm' parameter in solrconfig.xml file.
 
     }
 
-`
+```
 
 * Another Implementation for `findWithCustomEdismaxCriteria` method: 
 
-`
+```
+
     private Page<Product> findWithCustomEdismaxCriteria(String searchText,
                                                         String lang,
                                                         String fieldName,
@@ -209,11 +211,11 @@ So it should set a default value for the 'mm' parameter in solrconfig.xml file.
         Page<Product> solrDocuments = solrTemplate.query(solrCoreName, edismaxQuery, Product.class);
         return solrDocuments;
     }
-`
+```
 
 * Test(Call) the second Implementation for `findWithCustomEdismaxCriteria`:
 
-`
+```
     @Test
     public void whenSearchingProductsByNamedQueryAndCriteria_thenAllMatchingProductsShouldAvialble() {
         final Product phone = new Product();
@@ -244,4 +246,4 @@ So it should set a default value for the 'mm' parameter in solrconfig.xml file.
         assertEquals(wirelessChargerProduct.getName(), "Phone Charging Cable");
 
     }
-`
+```
