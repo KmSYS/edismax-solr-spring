@@ -3,6 +3,7 @@ package kmsys.teck.solr.edismax.model;
 public class Product {
     private String id;
     private String name;
+    private String description;
 
     //Getters & Setters
 
@@ -22,4 +23,16 @@ public class Product {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "id: " + id + " name: " + name;
+    }
 }

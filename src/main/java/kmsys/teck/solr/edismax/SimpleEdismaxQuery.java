@@ -2,9 +2,9 @@ package kmsys.teck.solr.edismax;
 
 import org.springframework.data.solr.core.query.SimpleQuery;
 
-public class SimpleEdismaxQuery extends SimpleQuery implements EdismaxQuery{
+public class SimpleEdismaxQuery extends SimpleQuery implements EdismaxQuery {
 
-    private String queryField="";
+    private String queryField = "";
 
     private String minimumMatch;
 
@@ -16,23 +16,23 @@ public class SimpleEdismaxQuery extends SimpleQuery implements EdismaxQuery{
         return minimumMatch;
     }
 
-    public void addQueryField(String fieldName){
-        addQueryField(fieldName,-1);
+    public void addQueryField(String fieldName) {
+        addQueryField(fieldName, -1);
     }
 
-    public void addQueryField(String fieldName,double boost){
-        String qf = (boost > 0.0)? String.format("%s^%.1f",fieldName,boost):fieldName;
-        if(queryField.isEmpty())
+    public void addQueryField(String fieldName, double boost) {
+        String qf = (boost > 0.0) ? String.format("%s^%.1f", fieldName, boost) : fieldName;
+        if (queryField.isEmpty())
             queryField = qf;
         else
             queryField += " " + qf;
     }
 
-    public void setMinimumMatchPercent(int percent){
-        minimumMatch = String.format("%d%%",percent);
+    public void setMinimumMatchPercent(int percent) {
+        minimumMatch = String.format("%d%%", percent);
     }
 
-    public void setMinimumMatchCount(int count){
-        minimumMatch = String.format("%d",count);
+    public void setMinimumMatchCount(int count) {
+        minimumMatch = String.format("%d", count);
     }
 }
