@@ -1,4 +1,4 @@
-package kmsys.teck.solr.edismax;
+package teck.kmsys.solr;
 
 import org.springframework.data.solr.core.query.SimpleQuery;
 

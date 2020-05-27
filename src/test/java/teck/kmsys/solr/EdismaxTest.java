@@ -1,7 +1,7 @@
-package kmsys.teck.solr.edismax;
+package teck.kmsys.solr;
 
-import kmsys.teck.solr.config.SolrConfig;
-import kmsys.teck.solr.edismax.model.Product;
+import teck.kmsys.solr.config.SolrConfig;
+import teck.kmsys.solr.model.Product;
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.Before;
 import org.junit.Test;

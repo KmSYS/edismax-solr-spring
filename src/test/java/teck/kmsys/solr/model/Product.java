@@ -1,4 +1,4 @@
-package kmsys.teck.solr.edismax.model;
+package teck.kmsys.solr.model;
 
 public class Product {
     private String id;
