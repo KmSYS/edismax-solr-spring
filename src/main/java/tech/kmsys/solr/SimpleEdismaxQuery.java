@@ -1,4 +1,4 @@
-package teck.kmsys.solr;
+package tech.kmsys.solr;
 
 import org.springframework.data.solr.core.query.SimpleQuery;
 

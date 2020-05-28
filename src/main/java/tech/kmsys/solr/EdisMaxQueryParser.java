@@ -1,4 +1,4 @@
-package teck.kmsys.solr;
+package tech.kmsys.solr;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.springframework.data.mapping.context.MappingContext;
@@ -28,12 +28,20 @@ public class EdisMaxQueryParser extends QueryParserBase<SolrDataQuery> {
         // just use the default parser to construct the query string in first place.
         SolrQuery target = defaultQueryParser.constructSolrQuery(edismaxQuery, aClass);
 
+        SimpleEdismaxQuery query = null;
+        if(edismaxQuery instanceof SimpleEdismaxQuery)
+            query = (SimpleEdismaxQuery) edismaxQuery;
+        else if(edismaxQuery instanceof AbstractQueryDecorator)
+            query = ((SimpleEdismaxQuery)((AbstractQueryDecorator)edismaxQuery).getDecoratedQuery());
+        else
+            return target;
+
         // add missing parameters
         target.add("defType", "edismax");
-        SimpleEdismaxQuery query = ((SimpleEdismaxQuery)((AbstractQueryDecorator)edismaxQuery).getDecoratedQuery());
         target.add("qf", query.getQueryField());
         if(query.getMinimumMatch()!=null && !query.getMinimumMatch().isEmpty())
             target.add("mm",query.getMinimumMatch());
+
         return target;
     }
 }
