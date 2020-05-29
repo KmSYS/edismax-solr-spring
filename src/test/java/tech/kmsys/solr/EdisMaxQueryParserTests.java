@@ -2,7 +2,6 @@ package tech.kmsys.solr;
 
 import org.apache.solr.client.solrj.SolrQuery;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.solr.core.mapping.SimpleSolrMappingContext;
@@ -11,7 +10,7 @@ import org.springframework.data.solr.core.query.SimpleStringCriteria;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EdisMaxQueryParserTests {
+class EdisMaxQueryParserTests {
 
 
     private EdisMaxQueryParser queryParser;
