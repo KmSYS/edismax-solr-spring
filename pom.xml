@@ -20,8 +20,14 @@
         <developer>
             <name>KmSYS</name>
             <email>ahmedramadanteleb@gmail.com</email>
-            <organization>kmsys.teck</organization>
-            <organizationUrl>https://github.com/KmSYS</organizationUrl>
+            <organization>tech.kmsys</organization>
+            <organizationUrl>http://www.kmsys.tech</organizationUrl>
+        </developer>
+        <developer>
+            <name>Ahmed Abdelhamid</name>
+            <email>ahmed.fcis@gmail.com</email>
+            <organization>tech.kmsys</organization>
+            <organizationUrl>http://www.kmsys.tech</organizationUrl>
         </developer>
     </developers>
     <scm>
