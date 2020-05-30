@@ -1,3 +1,4 @@
+![Java CI with Maven](https://github.com/KmSYS/edismax-solr-spring/workflows/Java%20CI%20with%20Maven/badge.svg)
 
 ## Prerequisites
 
