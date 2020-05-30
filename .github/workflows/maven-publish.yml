@@ -21,11 +21,16 @@ jobs:
         server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
         server-username: MAVEN_USERNAME
         server-password: MAVEN_PASSWORD
+    - name: Import gpg secret key
+      run: echo -e "$GPG_KEY" | gpg --batch --passphrase $GPG_PASS --import
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
     - name: Publish to Sonatype Packages Apache Maven
-      run: mvn -B deploy
+      run: mvn -B deploy -Dgpg.passphrase="'$GPG_PASS'"
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+        GPG_KEY: ${{ secrets.OSSRH_GPG_KEY }}
+	    GPG_PASS: ${{ secrets.OSSRH_GPG_PASS }}
